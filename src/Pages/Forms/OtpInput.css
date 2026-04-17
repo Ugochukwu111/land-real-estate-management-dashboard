@@ -1,0 +1,15 @@
+.otp-input-container{
+  gap: .5em;
+}
+
+.otp-input-container input{
+  width: 10px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.otp-input-container input.border-red{
+  border: 1px solid red;
+}
