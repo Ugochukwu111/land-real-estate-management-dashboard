@@ -116,7 +116,6 @@ export default function SignUp() {
    =================
    */
 
-
   const handleInputChange = (e) => {
     const { name, type, value, checked } = e.target;
 
