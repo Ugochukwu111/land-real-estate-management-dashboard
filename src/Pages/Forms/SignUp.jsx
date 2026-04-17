@@ -174,7 +174,7 @@ export default function SignUp() {
       tagline="Empowering associates with premium land banking opportunities across Nigeria. "
     >
       <form onSubmit={handleSubmit}>
-        <h5 className="text-center">Become an Associate</h5>
+        <h3 className="text-center">Become an Associate</h3>
         <p className="text-center text-muted">
           Secure your future. Start earning through strategic property
           partnerships.

@@ -77,7 +77,7 @@ export default function SignIn() {
     const hasErrors = Object.values(errors).some((msg) => msg !== "");
     if (hasErrors) return;
     setSubmitting(true);
-    
+
     try {
       const res = "";
     } catch (err) {
@@ -93,7 +93,7 @@ export default function SignIn() {
       tagline={`Access your ${businessName} dashboard to manage your listings and track your growth.`}
     >
       <form onSubmit={handleSubmit}>
-        <h5 className="text-center">Welcome Back</h5>
+        <h3 className="text-center">Welcome Back</h3>
         <p className="text-center text-muted">
           Enter your credentials to access your associate account
         </p>
@@ -104,7 +104,7 @@ export default function SignIn() {
               <span className="errorMsg text-fail">{errorMgs.email}</span>
             </div>
             <input
-              type="mail"
+              type="email"
               placeholder="johndoe@gmail.com"
               name="email"
               id="email"
@@ -137,9 +137,15 @@ export default function SignIn() {
           <SendHorizontal size={18} />
         </button>
         <p className="text-center">
-          Don'y have an Associate account ?
+          Don't have an Associate account ?
           <Link to="/sign-in" className="text-primary">
             Sign Up
+          </Link>
+        </p>
+        <p className="text-center">
+          Forgot password  ?
+          <Link to="/reset-password" className="text-primary">
+            reset password
           </Link>
         </p>
       </form>
