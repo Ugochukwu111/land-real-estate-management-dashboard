@@ -43,12 +43,12 @@ The admin has full control over associates, land listings, and verification proc
 root/
 ├── public/              # Static assets (favicons,)
 ├── src/                 # Main application source
-│   ├── assets/          # Images (dilux-logo.png, icons etc)
+│   ├── assets/          # Images (ogo.png, icons etc)
 │   ├── Components/      # Reusable UI pieces
-│   │   ├── AuthLayout/        # SignIn and SignUp Layout util
+│   │    ├── AuthLayout.jsx        # SignIn and SignUp Layout util
 │   ├── Pages/           # Full page views
-|   |    ├──Admin/      
-|   |    ├──Forms/       #SignIn SignUp page   
+|   |    ├──Admin/       #AdminSignIn  page
+|   |    ├──Forms/       #SignIn ,SignUp ,OTP, Forget Password , Reset Password pages  
 │   ├── App.jsx          # Component tree
 │   └── main.jsx         # Entry point & Routing
 ├── .gitignore           # Files to ignore in Git
