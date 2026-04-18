@@ -1,6 +1,6 @@
-# Dilux Properties Associate Dashboard
+# land-real-estate-management-dashboard
 
-A web application built for **Dilux Properties** to manage associates, land listings, and client tracking within a real estate system in Nigeria.
+A web application built for **land-real-estate-management** to manage associates, land listings, and client tracking within a real estate system in Nigeria.
 
 ---
 
@@ -53,7 +53,7 @@ root/
 │   └── main.jsx         # Entry point & Routing
 ├── .gitignore           # Files to ignore in Git
 ├── package.json         # Dependencies and scripts
-└── README.md            # You are here!
+└── README.md            # 
 
 ## installation & setup
 
