@@ -17,6 +17,7 @@
   ====================== */
   --text-primary: #222222;
   --text-muted: #cdcccc;
+  --color-bg-muted: #F5F5F5;
   --text-inverse: #FFFFFF;
   --text-fail: red;
 
@@ -47,6 +48,15 @@
     var(--color-primary),
     var(--color-secondary)
   );
+
+--gradient-sidebar: linear-gradient(
+  180deg,
+  #ffffff 0%,
+  #fdfbf7 60%,
+  #f6efe2 100%
+);
+
+
 
   /* ======================
      TYPOGRAPHY
@@ -101,6 +111,8 @@ p {
 
 svg{transition: all 200ms ease-in-out;}
 
+ul{list-style: none;}
+
 
 /* Backgrounds */
 .bg-primary { background: var(--color-primary); }
@@ -110,9 +122,11 @@ svg{transition: all 200ms ease-in-out;}
 .bg-success { background: var(--color-success); }
 .bg-success-light { background: var(--color-success-light); }
 .bg-white { background: var(--white); }
+.bg-muted{background-color: var(--color-bg-muted);}
 
 /* Text */
 .text-primary { color: var(--text-primary); }
+.text-red { color: var(--color-primary); }
 .text-secondary { color: var(--color-secondary); }
 .text-muted { color: var(--text-muted); }
 .text-inverse { color: var(--text-inverse); }
