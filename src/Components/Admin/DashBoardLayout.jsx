@@ -1,13 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard,
-  ShoppingCart,
-  UserRound,
-  PackageSearch,
   Crown,
   ChevronDown,
   House,
-  BanknoteArrowDown,
+  UserRoundCog,
   Brain,
   Cog,
   Bell,
@@ -62,9 +59,9 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
               to="/admin/dashboard"
                className='text-red fw500'
               >
-                <BanknoteArrowDown />
+                <UserRoundCog />
                 <span>
-                  Transactions
+                  Associates
                 </span>
               </NavLink>
             </li>
@@ -178,12 +175,12 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
             <figure>
                 <img src={profileIcon} alt="profile "/>
             </figure>
-            {/* <p className="flex  items-center remove-mobile">
+            <p className="flex  items-center remove-mobile">
               <span className="text-muted d-block">
                 {rank}
               </span>
                <ChevronDown />
-            </p> */}
+            </p>
           </button>
           </div>
         </header>

@@ -1,0 +1,51 @@
+.chart {
+  height: 340px;
+  border-radius: .5rem;
+
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  transition: all 0.3s ease;
+  padding: 1em;
+}
+
+.chart:hover {
+  transform: translateY(-6px);
+  box-shadow:0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+.line-chart{
+  max-height: 300px;
+}
+
+
+.responsive-row {
+  display: flex;
+  margin: .25em 0;
+}
+
+/* force equal behavior */
+.responsive-row > div {
+  flex: 1 1 0;
+  min-width: 0; 
+}
+
+.chart-heading{
+  position: absolute;
+  width: 100%;
+  top: .25em;
+
+}
+
+/* mobile fix */
+@media (max-width: 768px) {
+  .responsive-row {
+    flex-direction: column;
+  }
+}
