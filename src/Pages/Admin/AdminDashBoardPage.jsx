@@ -1,4 +1,3 @@
-import { DashBoardLayout } from "../../Components/Admin/DashBoardLayout";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 
@@ -147,8 +146,7 @@ export default function AdminDashBoardPage() {
   };
 
   return (
-    <DashBoardLayout isAdmin={true}>
-      {/* 🔥 LINE CHART */}
+    <div>
       <div className="container">
       <div className="flex-1 chart">
          <h6 className="c">  Deals Closed per month</h6>
@@ -160,7 +158,7 @@ export default function AdminDashBoardPage() {
       <div className="flex flex-1 gap-1  responsive-row">
         <div className="flex-1 chart">
           <h6 className="">Number of associates</h6>
-          <div className="flex-1">
+          <div className="h-full">
           <Bar
             data={{
               labels: [ "Apr", "May", "Jun", "july", "Aug"],
@@ -219,6 +217,6 @@ export default function AdminDashBoardPage() {
         </div>
       </div>
       </div>
-    </DashBoardLayout>
+    </div>
   );
 }
