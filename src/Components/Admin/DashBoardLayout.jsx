@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink,Outlet  } from "react-router-dom";
+
 import { 
   LayoutDashboard,
   Crown,
@@ -30,7 +31,7 @@ const businessName = import.meta.env.VITE_BUSINESS_NAME;
 
 
 
-export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}) {
+export  function DashBoardLayout({children,  isAdmin = false}) {
 
   return (
     <div className="dashboard-layout-container">
@@ -39,13 +40,13 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
           <h1>
             <Crown />
              <span>{businessName}</span> 
-            <span className="text-muted d-block" >{rank}</span>
+            <span className="text-muted d-block" >{isAdmin?'Administrator': 'Associate'}</span>
           </h1>
           {/* admin Navigation */}
           { (isAdmin && <ul>
               <li>
               <NavLink 
-              to="/"
+                to="dashboard" 
                className='text-red fw500'
               >
                 <LayoutDashboard />
@@ -56,7 +57,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
             </li>
             <li>
               <NavLink 
-              to="/admin/dashboard"
+              to="associate"
                className='text-red fw500'
               >
                 <UserRoundCog />
@@ -68,7 +69,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
             <li>
               <NavLink 
                className='text-red fw500'
-              to="/admin/orders">
+              to="intelligence">
                 <Brain />
                 <span>
                   Intelligence
@@ -78,7 +79,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
             <li>
               <NavLink 
                className='text-red fw500'
-              to="/admin/users">
+              to="settings">
                 <Cog />
                  <span>
                    Settings
@@ -92,7 +93,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
           {(!isAdmin && <ul>
               <li>
               <NavLink 
-              to="/"
+              to="dashboard"
                className='text-red fw500'
               >
                 <LayoutDashboard />
@@ -147,7 +148,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
             </span>
        
             <span className="text-muted">
-              {rank}
+              {isAdmin?'Administrator': 'Associate'}
             </span>
           </p>
         </div>
@@ -177,7 +178,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
             </figure>
             <p className="flex  items-center remove-mobile">
               <span className="text-muted d-block">
-                {rank}
+                {isAdmin?'Administrator': 'Associate'}
               </span>
                <ChevronDown />
             </p>
@@ -186,7 +187,7 @@ export  function DashBoardLayout({children, rank = 'Associate', isAdmin = false}
         </header>
 
         <main className="bg-muted">
-          {children}
+         <Outlet />
         </main>
       </div>
     </div>
