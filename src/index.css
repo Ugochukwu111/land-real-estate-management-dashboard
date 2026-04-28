@@ -11,6 +11,7 @@
   --color-bg: #F7F7F7;           /* main background */
   --color-surface: #1A1A1A;      /* dark surfaces */
   --color-border: #5C5C5C;
+  --color-danger: red;
 
   /* ======================
      TEXT SYSTEM
@@ -90,6 +91,9 @@ img {
   object-fit: cover;
   width: 100%;
 }
+figure{
+  overflow: hidden;/*so that img(child) border radius remains hidden and smooth*/
+}
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
@@ -123,6 +127,7 @@ ul{list-style: none;}
 .bg-success-light { background: var(--color-success-light); }
 .bg-white { background: var(--white); }
 .bg-muted{background-color: var(--color-bg-muted);}
+.bg-danger{background-color: var(--color-danger);}
 
 /* Text */
 .text-primary { color: var(--text-primary); }
@@ -132,6 +137,7 @@ ul{list-style: none;}
 .text-inverse { color: var(--text-inverse); }
 .text-accent { color: var(--color-primary); }
 .text-success { color: var(--color-success); }
+.text-success-light {color: var(--color-success-light);}
 .text-fail{color: var(--text-fail);}
 
 .border { border: 5px solid var(--color-primary); }
@@ -180,6 +186,8 @@ ul{list-style: none;}
  .fw500{font-weight: 500;}
  .fw700{font-weight: 700;}
 
+ .fs-small{ font-size: clamp(.7rem, 0.8rem + 1vw, .8rem) }
+
 
 
 
@@ -196,7 +204,7 @@ ul{list-style: none;}
 
 
 .container {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 1rem;
 }
@@ -249,4 +257,34 @@ COMPONENTS UTILS
   max-width:  600px;
   margin: .5em;
   min-height: 300px;
+}
+
+/* Skeleton Base */
+.skeleton-container {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-bg-muted);
+  border-radius: 8px;
+}
+
+/* Shimmer Effect */
+.skeleton-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(227, 227, 227, 0.767),
+    transparent
+  );
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+/* Animation */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
