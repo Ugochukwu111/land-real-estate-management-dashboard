@@ -4,13 +4,21 @@
   background-color: var(--white);
 }
 
+.dashboard-layout-container h2{
+    font-size: clamp(.8rem, 0.8rem + 1vw, 1.2rem);
+}
+
+
+.dashboard-layout-container h3{
+  font-size: clamp(.8rem, 0.8rem + 1vw, 1.2rem);
+}
+
 .dashboard-layout-container-profile-btn{
   font-size: .7rem;
 }
 
 .dashboard-layout-container svg{
   flex-shrink: 0; 
-  color: var(--color-primary);
 }
 
  .dashboard-layout-container-sidebar{
