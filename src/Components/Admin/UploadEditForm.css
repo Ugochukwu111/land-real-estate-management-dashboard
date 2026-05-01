@@ -1,0 +1,22 @@
+.upload-edit-form{
+  padding: 1.5em 1em;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
+  scrollbar-width: none;
+}
+
+.upload-edit-form h3{
+   font-size: clamp(.8rem, 0.8rem + 1vw, 1.2rem);
+}
+
+.upload-edit-form figure{
+  border: 1px solid var(--muted);
+  height: 200px;
+  border-radius: .5rem;
+  margin-bottom: 1em;
+}
+
+.price-location-container{
+  margin: 1em 0;
+}
