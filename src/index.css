@@ -157,6 +157,7 @@ ul{list-style: none;}
 
 .items-center { align-items: center; }
 .items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
 
 .justify-between { justify-content: space-between; }
 .justify-center { justify-content: center; }
@@ -232,6 +233,15 @@ ul{list-style: none;}
   transform: scale(1.05);
 }
 
+.close-btn-X{
+  position: absolute;
+  top: -1.3em;
+  right: -.8em;
+  background-color: transparent;
+}
+
+.p-relative{position: relative;}
+
 
 /* 
 ==============
@@ -287,4 +297,108 @@ COMPONENTS UTILS
   100% {
     transform: translateX(100%);
   }
+}
+
+
+
+ .input-wrapper > div{
+  /* margin: .5em 0; */
+}
+
+ .input-container{
+  position: relative;
+  display: grid;
+}
+
+ .input-container svg{
+  position: absolute;
+  right: 1em;
+  top: 1.75em;
+  color: var(--text-muted);
+  display: grid;
+  place-self: center;
+}
+
+.input-wrapper label{
+  font-size: .8rem;
+  cursor: pointer;
+}
+
+ .input-wrapper input{
+  padding: .8em 1.5em;
+  border-radius: .5rem;
+  border: .5px solid var(--text-muted);
+  outline: .5px solid transparent;
+  transition: all 200ms ease-in-out;
+}
+
+/* highlight svg icons when user starts typing */
+ .input-wrapper input:not(:placeholder-shown) +  svg{
+  color: var(--color-primary);
+}
+
+ .input-wrapper input:focus{
+  outline: .5px solid var(--color-primary);
+   border: .5px solid var(--color-primary);
+}
+
+
+
+.dropdown {
+  position: relative;
+  width: 100%;
+  border:  1px solid var(--text-muted);
+  border-radius: .5rem;
+}
+
+.dropdown-trigger {
+  width: 100%;
+  padding: 10px 12px;
+  background: #F7F7F7;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 10px;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+
+  opacity: 0;
+  transform: translateY(-6px) scale(0.98);
+  pointer-events: none;
+
+  transition: all 0.2s ease;
+  z-index: 50;
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+/* Active state */
+.dropdown-menu.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Items */
+.dropdown-menu li {
+  padding: 10px 12px;
+  cursor: pointer;
+  color: #555;
+}
+
+.dropdown-menu li:hover {
+  background: #F5F5F5;
 }
