@@ -1,0 +1,22 @@
+.open-deals-card-container{
+  border: 1px solid var(--text-muted);
+  padding: 1em;
+  min-height: 500px;
+  margin-top: 2em;
+  border-top-left-radius: .5rem;
+  border-top-right-radius: .5rem;
+
+}
+
+
+
+@media (max-width: 500px) {
+
+.open-deals-card-container{
+  padding: .5em;
+  margin-top: 1.5em;
+}
+
+
+  
+}
