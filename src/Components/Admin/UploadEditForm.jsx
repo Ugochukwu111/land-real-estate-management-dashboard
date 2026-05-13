@@ -189,7 +189,25 @@ export default function UploadEditForm({
             />
           </div>
 
-          <div className="flex-1">
+         <div className="flex flex-col input-container flex-1">
+            <div className="flex justify-between items-end">
+              <span className="errorMsg text-fail">{errorMgs.description}</span>
+            </div>
+            <input
+              type="number"
+              step={1}
+              placeholder="Enter Commission Price "
+              name="commission-price"
+              id="commission-price"
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          </div>
+
+          
+        </div>
+        <br />
+        <div className="flex-1">
             <DropDown
               selected={formValues.location || "select location"}
               setSelected={(val) =>
@@ -201,8 +219,6 @@ export default function UploadEditForm({
               list={locationList}
             />
           </div>
-        </div>
-        <br />
         <div>
           <p className="text-muted">selected Documents:</p>
           <div>
