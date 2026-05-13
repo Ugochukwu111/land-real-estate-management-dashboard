@@ -1,0 +1,6 @@
+.settings-card{
+  padding-inline: 1em;
+}
+.settings-card:hover{
+  color: var(--text-inverse);
+}

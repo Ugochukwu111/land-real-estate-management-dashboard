@@ -1,0 +1,6 @@
+.settings-card-container {
+  max-width: 600px;
+  padding: 2em 1.5em;
+  border-radius: .5rem;
+  background-color: var( --color-light-primary);
+}
