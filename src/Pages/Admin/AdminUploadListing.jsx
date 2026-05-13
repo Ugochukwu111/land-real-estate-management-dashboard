@@ -42,6 +42,7 @@ export default function AdminUploadListing() {
     name: "",
     description: "",
     price: 5000,
+    commissionPrice: 5000, 
     location: '',
     documents: [],
   });
