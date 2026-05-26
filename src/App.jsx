@@ -28,6 +28,15 @@ import AdminSettingsPage from "./Pages/Admin/AdminSettingsPage";
 import AdminUploadListing from "./Pages/Admin/AdminUploadListing";
 import AdminOpenDeals from "./Pages/Admin/AdminOpenDeals";
 
+
+/*
+=================
+ASSOCIATE PAGES
+=================
+ */
+import AssociateDashBoardPage from "./Pages/Associate/AssociateDashboard";
+
+
 function App() {
   return (
     <>
@@ -50,6 +59,24 @@ function App() {
             <Route path="open-deals" element={<AdminOpenDeals />} />
           </Route>
         </Route>
+ 
+ {/* associates navigation */}
+        
+        <Route path="/associate" element={<DashBoardLayout isAdmin={false} />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<AssociateDashBoardPage />} />
+          <Route path="edith" element={<AdminDashBoardPage />} />
+          <Route path="associate" element={<AdminAssociatePage />} />
+          <Route path="settings" element={<AdminSettingsPage />} />
+          <Route path="intelligence" element={<AdminIntelligencePage />}>
+            <Route index element={<Navigate to="upload-listing" replace />} />
+            <Route path="upload-listing" element={<AdminUploadListing />} />
+            <Route path="open-deals" element={<AdminOpenDeals />} />
+          </Route>
+        </Route>
+
+
+
       </Routes>
     </>
   );

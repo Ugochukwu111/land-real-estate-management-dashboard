@@ -6,7 +6,7 @@ import AnalyticsPieChart from "../../Components/Charts/AnalyticsPieChart";
 
 import AnalyticsDashboardLayout from "../../Components/Charts/AnalyticsDashboardLayout";
 
-export default function AdminDashBoardPage() {
+export default function AssociateDashBoardPage() {
   const months = ["Apr", "May", "Jun", "Jul", "Aug"];
 
   return (
@@ -14,27 +14,31 @@ export default function AdminDashBoardPage() {
 
       lineChart={
         <AnalyticsLineChart
-          title="Deals Closed Per Month"
+          title="Monthly Commission"
           labels={months}
-          datasetLabel="Deals Closed"
-          data={[12, 19, 8, 25, 18]}
+          datasetLabel="Commission Earned"
+          data={[200, 450, 300, 700, 500]}
+          color="#d3a23e"
+          fillColor="rgba(211, 162, 62, 0.15)"
         />
       }
 
       barChart={
         <AnalyticsBarChart
-          title="Number of Associates"
+          title="Referrals"
           labels={months}
-          datasetLabel="Total Associates"
-          data={[5, 8, 6, 10, 9]}
+          datasetLabel="Successful Referrals"
+          data={[2, 4, 1, 7, 3]}
+          color="#733939"
         />
       }
 
       doughnutChart={
         <AnalyticsPieChart
-          title="Revenue, Commission, Profit"
-          labels={["Revenue", "Commission", "Profit"]}
-          data={[500000, 120000, 380000]}
+          title="Lead Status"
+          labels={["Converted", "Pending", "Lost"]}
+          data={[12, 7, 3]}
+          colors={["green", "#d3a23e", "#733939"]}
         />
       }
 
