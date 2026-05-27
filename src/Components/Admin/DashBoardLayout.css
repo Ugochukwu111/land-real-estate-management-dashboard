@@ -123,6 +123,8 @@
   display: flex;
   flex-direction: column;
   overflow: auto;
+  position: relative;
+  scrollbar-width: none;
 }
 
 
@@ -132,6 +134,9 @@
   justify-content: space-between;
   border-bottom: 1px solid var(--text-muted);
   background: var(--gradient-sidebar);
+  position: sticky;
+  top: 0em;
+  z-index: 1;
 }
 .dashboard-layout-container .dashboard-layout-container-header-main-container .header figure{
   width: 30px ;
@@ -144,7 +149,7 @@
 }
 
 .dashboard-layout-container .dashboard-layout-container-header-main-container main{
-  padding: .5em;
+  padding: .25em;
   flex: 1;
 }
 

@@ -108,7 +108,7 @@ export  function DashBoardLayout({children,  isAdmin = false}) {
             </li>
             <li>
               <NavLink 
-              to="/admin/dashboard"
+              to="acquisition"
                className='text-red fw500'
               >
                 <ArrowUpFromLine />
