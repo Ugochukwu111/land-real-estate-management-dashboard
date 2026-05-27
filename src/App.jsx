@@ -34,7 +34,7 @@ import AdminOpenDeals from "./Pages/Admin/AdminOpenDeals";
 ASSOCIATE PAGES
 =================
  */
-import AssociateDashBoardPage from "./Pages/Associate/AssociateDashboard";
+import AssociateDashBoardPage from "./Pages/Associate/AssociateDashboardPage";
 
 
 function App() {
