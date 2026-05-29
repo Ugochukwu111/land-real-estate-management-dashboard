@@ -75,8 +75,9 @@ export default function AdminUploadListing() {
         </div>
         <br />
         <div className="card-container bg-muted ">
-          <ListingCard />
-          <ListingCard />
+          <ListingCard  isAdmin = {true}/>
+          <ListingCard isAdmin = {true}/>
+          <ListingCard isAdmin = {true} />
         </div>
       </div>
     </>
