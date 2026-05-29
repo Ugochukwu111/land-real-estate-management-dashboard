@@ -11,6 +11,21 @@
   border: 2px solid var(--text-muted);
   border-radius: inherit;
   min-height: 250px;
+  position: relative;
+}
+
+.listing-card .listing-image .btn-container{
+  position: absolute;
+  background-color: rgba(142, 142, 142, 0.541);
+  bottom: 0;
+  right: 0;
+  padding: .5em;
+  border-top-left-radius: inherit;
+}
+
+.listing-card .listing-image .btn-container button{
+  background-color: transparent;
+  border: none;
 }
 
 .listing-card .listing-name{
@@ -22,6 +37,7 @@
  margin: .5em 0;
    display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
