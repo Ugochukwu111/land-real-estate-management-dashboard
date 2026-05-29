@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Lock, Mail, Phone, SendHorizontal } from "lucide-react";
@@ -7,6 +10,7 @@ import "./Forms.css";
 import redLogo from '../../assets/logo.png';
 
 const businessName = import.meta.env.VITE_BUSINESS_NAME;
+const baseAPI = import.meta.env.VITE_API_ENDPOINT;
 
 
 /*
@@ -34,15 +38,17 @@ const businessName = import.meta.env.VITE_BUSINESS_NAME;
  
 
 export default function SignUp() {
+  const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     email: "",
     password: "",
     phoneNumber: "234",
-    termsAndConditions: false,
+    termsAndCondition: false,
   });
 
   const [errorMgs, setErrorMgs] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -106,7 +112,7 @@ export default function SignUp() {
     errors.email = validateEmail(formValues.email);
     errors.password = validatePassword(formValues.password);
     errors.phoneNumber = validatePhoneNumber(formValues.phoneNumber);
-    errors.termsAndConditions = validateTerms(formValues.termsAndConditions);
+    errors.termsAndCondition = validateTerms(formValues.termsAndCondition);
 
     return errors;
   };
@@ -136,15 +142,21 @@ export default function SignUp() {
 
     const hasErrors = Object.values(errors).some((msg) => msg !== "");
     if (hasErrors) return;
-    console.log(formValues);
-
     try {
-      setSubmitting(true);
-      // const res = await  axios.post(`api`)
+      setIsSubmitting(true);
+      const res = await  axios.post(`${baseAPI}/api/auth/register`, formValues);
+
+      toast.success( res.message || "Registration successful");
+
+      setTimeout(()=>{
+        navigate('/confirm-otp')
+      },2000)
+
     } catch (err) {
-      console.log(err);
+      toast.error(  err.response.data.error || "Error something went wrong");
+      console.error(err.response.data);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -152,7 +164,7 @@ export default function SignUp() {
     if (name === "email") return validateEmail(value);
     if (name === "password") return validatePassword(value);
     if (name === "phoneNumber") return validatePhoneNumber(value);
-    if (name === "termsAndConditions") return validateTerms(value);
+    if (name === "termsAndCondition") return validateTerms(value);
     return "";
   };
 
@@ -243,24 +255,29 @@ export default function SignUp() {
         <div className="flex items-center">
           <input
             type="checkbox"
-            name="termsAndConditions"
-            checked={formValues.termsAndConditions}
+            name="termsAndCondition"
+            checked={formValues.termsAndCondition}
             onChange={handleInputChange}
             onBlur={handleBlur}
           />
           &nbsp; &nbsp;
           <p>
             I agree to the
-            <span className="text-secondary fw700">Terms of Service</span> and
-            <span className=" text-secondary fw700">Privacy Policy</span>
+            <span className="text-secondary fw700"> Terms of Service </span> and
+            <span className=" text-secondary fw700"> Privacy Policy </span>
           </p>
         </div>
         <span className="errorMsg text-fail text-end">
-          {errorMgs.termsAndConditions}
+          {errorMgs.termsAndCondition}
         </span>
         <br />
-        <button className="btn text-inverse bg-primary" id="submit-btn">
-          Register Now
+        <button 
+         disabled = {isSubmitting}
+         className={`btn text-inverse bg-primary ${isSubmitting ? 'submitting' : ''}  `} 
+         id="submit-btn">
+          {
+            isSubmitting ? 'Registering...' : 'Register Now'
+          }
           <SendHorizontal size={18} />
         </button>
         <p className="text-center">

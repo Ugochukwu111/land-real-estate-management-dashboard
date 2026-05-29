@@ -68,6 +68,29 @@
  animation: slide 5s infinite;
 }
 
+#submit-btn.submitting{
+  opacity: .8;
+}
+
+#submit-btn.submitting svg{
+ animation: submitting 2s infinite;
+}
+
+@keyframes submitting {
+  0%{
+    transform: translateX(0px);
+  }25%{
+    transform: translateX(15px);
+  }50%{
+    transform: translateX(30px);
+  }75%{
+    transform: translateX(15px);
+  }
+  100%{
+    transform: translateX(0px);
+  }
+}
+
 @keyframes slide {
   0%{
     transform: translateX(0px);

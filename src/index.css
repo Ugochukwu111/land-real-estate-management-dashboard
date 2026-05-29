@@ -210,7 +210,7 @@ ul{list-style: none;}
 .container {
   max-width: 1500px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: .5rem;
 }
 
 .btn {
@@ -260,6 +260,7 @@ COMPONENTS UTILS
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 }
 
  .modal {
@@ -405,4 +406,64 @@ COMPONENTS UTILS
 
 .dropdown-menu li:hover {
   background: #F5F5F5;
+}
+
+/* 
+=============
+   TOASTIFY STYLES
+============*/
+/* MAIN TOAST */
+
+.Toastify__toast {
+  background: var(--white);
+  color: var(--text-primary);
+  border-radius: 16px;
+  border-left: 5px solid var(--color-primary);
+  padding: 14px;
+  font-family: var(--font-body);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* SUCCESS */
+
+.Toastify__toast--success {
+  border-left: 5px solid var(--color-success);
+}
+
+/* ERROR */
+
+.Toastify__toast--error {
+  border-left: 5px solid var(--color-danger);
+}
+
+/* WARNING */
+
+.Toastify__toast--warning {
+  border-left: 5px solid var(--color-secondary);
+}
+
+/* INFO */
+
+.Toastify__toast--info {
+  border-left: 5px solid var(--color-primary);
+}
+
+/* TEXT */
+
+.Toastify__toast-body {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* PROGRESS BAR */
+
+.Toastify__progress-bar {
+  background: var(--gradient-accent);
+}
+
+/* CLOSE BUTTON */
+
+.Toastify__close-button {
+  color: var(--text-primary);
+  opacity: 1;
 }
