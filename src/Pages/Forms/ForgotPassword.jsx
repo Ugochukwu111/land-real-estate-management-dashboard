@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail, SendHorizontal } from "lucide-react";
+import { toast } from "react-toastify";
 
 import AuthLayout from "../../Components/AuthLayout.jsx";
-import redLogo from '../../assets/logo.png';
+import redLogo from "../../assets/logo.png";
 
+import { forgotPassword } from "../../services/endpoints.js";
 
 import "./Forms.css";
 
@@ -13,7 +15,8 @@ const businessName = import.meta.env.VITE_BUSINESS_NAME;
 export default function ForgotPassword() {
   const [formValues, setFormValues] = useState({ email: "" });
   const [errorMgs, setErrorMgs] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -56,21 +59,33 @@ export default function ForgotPassword() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = validate(formValues);
     setErrorMgs(errors);
 
     const hasErrors = Object.values(errors).some((msg) => msg !== "");
     if (hasErrors) return;
-    setSubmitting(true);
+    setIsSubmitting(true);
 
     try {
-      const res = "";
+      const res = await forgotPassword(formValues.email);
+      toast.success(
+        res?.message || "Password reset instructions sent to your email!",
+      );
+      setTimeout(() => {
+        navigate(
+          `/confirm-otp?email=${encodeURIComponent(res?.email || formValues.email)}&purpose=forgot-password`,
+        );
+      }, 2000);
     } catch (err) {
-      console.log(err);
+      toast.error(
+        err.response?.error ||
+          "Failed to send reset instructions. Please try again.",
+      );
+      console.error(err.response);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -107,7 +122,11 @@ export default function ForgotPassword() {
           </div>
         </div>
         <br />
-        <button className="btn text-inverse bg-primary" id="submit-btn">
+        <button
+          disabled={isSubmitting}
+          className={`btn text-inverse bg-primary ${isSubmitting ? "submitting" : ""}  `}
+          id="submit-btn"
+        >
           Send Reset Code
           <SendHorizontal size={18} />
         </button>
