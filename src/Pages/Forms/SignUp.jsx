@@ -149,7 +149,7 @@ export default function SignUp() {
       toast.success( res.message || "Registration successful");
 
       setTimeout(()=>{
-        navigate('/confirm-otp')
+        navigate(`/confirm-otp?email=${encodeURIComponent(res.email || formValues.email)}`);
       },2000)
 
     } catch (err) {
