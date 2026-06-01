@@ -36,7 +36,7 @@ export default function ConfirmOtp() {
       toast.success(res?.message || "OTP confirmed successfully!");
       setTimeout(() => {
         if (purpose === "forgot-password") {
-          navigate("/reset-password");
+          navigate(`/reset-password?email=${email}`);
         } else {
           navigate("/associate");
         }

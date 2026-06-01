@@ -42,3 +42,13 @@ export const  forgotPassword = async (email) => {
     throw error; 
   }
 }
+
+export const  resetPassword = async (email, password) => {
+  try {
+    const response = await axios.post(`${baseAPI}/api/auth/reset-password`, { email, password });
+    return response.data;
+  } catch (error) {
+    console.error("reset password error", error);
+    throw error; 
+  }
+}

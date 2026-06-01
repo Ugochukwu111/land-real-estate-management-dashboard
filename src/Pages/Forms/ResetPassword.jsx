@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Lock, SendHorizontal } from "lucide-react";
+import { toast } from "react-toastify";
 
 import AuthLayout from "../../Components/AuthLayout.jsx";
-import redLogo from '../../assets/logo.png';
+import redLogo from "../../assets/logo.png";
 
+import { resetPassword } from "../../services/endpoints.js";
 
 import "./Forms.css";
 
@@ -17,7 +19,11 @@ export default function ResetPassword() {
   });
 
   const [errorMgs, setErrorMgs] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const email = searchParams.get("email");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,7 +87,7 @@ export default function ResetPassword() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const errors = validate(formValues);
@@ -90,15 +96,26 @@ export default function ResetPassword() {
     const hasErrors = Object.values(errors).some((msg) => msg !== "");
     if (hasErrors) return;
 
-    setSubmitting(true);
+    setIsSubmitting(true);
 
     try {
-      console.log("New Password:", formValues.password);
-      // await axios.post('/reset-password', { password: formValues.password, token })
+      const res = await resetPassword(email, formValues.password);
+      console.log("Reset Password Response:", res.data);
+      toast.success(
+        res?.message ||
+          "Password reset successful! Please log in with your new password.",
+      );
+      setTimeout(() => {
+        navigate("/sign-in");
+      }, 2000);
     } catch (err) {
-      console.log(err);
+      toast.error(
+        err?.response?.data?.error ||
+          "Failed to reset password. Please try again.",
+      );
+      console.error("Reset password error:", err);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -158,8 +175,11 @@ export default function ResetPassword() {
 
         <br />
 
-        <button className="btn text-inverse bg-primary" id="submit-btn">
-          Reset Password
+        <button
+          disabled={isSubmitting}
+          className={`btn text-inverse w-full  bg-primary ${isSubmitting ? "submitting" : ""}  `}
+        >
+          {isSubmitting ? "Resetting..." : "Reset Password"}
           <SendHorizontal size={18} />
         </button>
 
