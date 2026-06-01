@@ -100,7 +100,6 @@ export default function ResetPassword() {
 
     try {
       const res = await resetPassword(email, formValues.password);
-      console.log("Reset Password Response:", res.data);
       toast.success(
         res?.message ||
           "Password reset successful! Please log in with your new password.",

@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail, SendHorizontal } from "lucide-react";
+import { toast } from "react-toastify";
 
 import AuthLayout from "../../Components/AuthLayout.jsx";
 import redLogo from '../../assets/logo.png';
 
+import { logInUser } from "../../services/endpoints.js";
 
 import "./Forms.css";
 
@@ -13,7 +15,8 @@ const businessName = import.meta.env.VITE_BUSINESS_NAME;
 export default function SignIn() {
   const [formValues, setFormValues] = useState({ email: "", password: "" });
   const [errorMgs, setErrorMgs] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -71,21 +74,29 @@ export default function SignIn() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =  async (e) => {
     e.preventDefault();
     let errors = validate(formValues);
     setErrorMgs(errors);
 
     const hasErrors = Object.values(errors).some((msg) => msg !== "");
     if (hasErrors) return;
-    setSubmitting(true);
+    setIsSubmitting(true);
 
     try {
-      const res = "";
+      const res = await logInUser(formValues.email, formValues.password);
+        toast.success(res?.message || "Logged in successfully!");
+        setTimeout(() => {
+          navigate("/associate");
+        },2000);
     } catch (err) {
-      console.log(err);
+      toast.error(
+        err?.response?.data?.error ||
+          "Failed to log in. Please check your credentials and try again."
+      );
+      console.error(err.response);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -137,20 +148,23 @@ export default function SignIn() {
           </div>
         </div>
         <br />
-        <button className="btn text-inverse bg-primary" id="submit-btn">
-          Access Dashboard
+        <button 
+         disabled = {isSubmitting}
+         className={`btn text-inverse bg-primary ${isSubmitting ? 'submitting' : ''}  `}  
+         id="submit-btn">
+          {isSubmitting ? "Logging in..." : "Access Dashboard"}
           <SendHorizontal size={18} />
         </button>
         <p className="text-center">
-          Don't have an Associate account ?
+          Don't have an Associate account ? &nbsp;
           <Link to="/sign-up" className="text-primary">
             Sign Up
           </Link>
         </p>
         <p className="text-center">
-          Forgot password ?
-          <Link to="/reset-password" className="text-primary">
-            reset password
+          Forgot password ? &nbsp;
+          <Link to="/forgot-password" className="text-primary">
+             forgot password
           </Link>
         </p>
       </form>
