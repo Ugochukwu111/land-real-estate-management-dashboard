@@ -6,6 +6,7 @@ export default function DropDown({
   selected,
   setSelected,
   multiple = false,
+  placeholder = "Select option",
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef();
@@ -46,11 +47,15 @@ export default function DropDown({
         onClick={() => setOpen((prev) => !prev)}
       >
         {/* display value */}
-        {multiple
-          ? Array.isArray(selected) && selected.length > 0
-            ? selected.join(", ")
-            : "Select options"
-          : selected}
+        {multiple ? (
+          Array.isArray(selected) && selected.length > 0 ? (
+            selected.join(", ")
+          ) : (
+            <span className="text-muted">{placeholder}</span>
+          )
+        ) : (
+          selected || <span className="text-muted">{placeholder}</span>
+        )}
 
         <ChevronDown className="text-muted" size={18} />
       </button>
