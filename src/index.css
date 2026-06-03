@@ -268,9 +268,9 @@ COMPONENTS UTILS
   padding: 1em .5em;
   border-radius: .5rem;
   width: 100%;
-  max-width:  600px;
+  max-width:  700px;
   margin: .5em;
-  min-height: 300px;
+  min-height: 500px;
 }
 
 /* Skeleton Base */
@@ -466,4 +466,48 @@ COMPONENTS UTILS
 .Toastify__close-button {
   color: var(--text-primary);
   opacity: 1;
+}
+
+
+/* 
+===============================================
+  API BUTTON SUBMITTING STATE 
+  =============================================
+ */
+ #submit-btn.submitting{
+  opacity: .8;
+}
+
+#submit-btn.submitting svg{
+ animation: submitting 2s infinite;
+}
+
+@keyframes submitting {
+  0%{
+    transform: translateX(0px);
+  }25%{
+    transform: translateX(15px);
+  }50%{
+    transform: translateX(30px);
+  }75%{
+    transform: translateX(15px);
+  }
+  100%{
+    transform: translateX(0px);
+  }
+}
+
+@keyframes slide {
+  0%{
+    transform: translateX(0px);
+  }25%{
+    transform: translateX(0px);
+  }50%{
+    transform: translateX(0px);
+  }75%{
+    transform: translateX(0px);
+  }
+  100%{
+    transform: translateX(20px);
+  }
 }
