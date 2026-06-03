@@ -2,9 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail, SendHorizontal } from "lucide-react";
 import { toast } from "react-toastify";
+import useUserStore from "../../store/user.js";
 
 import AuthLayout from "../../Components/AuthLayout.jsx";
-import redLogo from '../../assets/logo.png';
+import redLogo from "../../assets/logo.png";
 
 import { logInUser } from "../../services/endpoints.js";
 
@@ -17,6 +18,7 @@ export default function SignIn() {
   const [errorMgs, setErrorMgs] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const setAccessToken = useUserStore((state) => state.setAccessToken);
 
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -74,7 +76,7 @@ export default function SignIn() {
     }));
   };
 
-  const handleSubmit =  async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let errors = validate(formValues);
     setErrorMgs(errors);
@@ -85,14 +87,17 @@ export default function SignIn() {
 
     try {
       const res = await logInUser(formValues.email, formValues.password);
-        toast.success(res?.message || "Logged in successfully!");
-        setTimeout(() => {
-          navigate("/associate");
-        },2000);
+
+      setAccessToken(res?.accessToken);
+      toast.success(res?.message || "Logged in successfully!");
+
+      setTimeout(() => {
+        navigate("/associate");
+      }, 2000);
     } catch (err) {
       toast.error(
         err?.response?.data?.error ||
-          "Failed to log in. Please check your credentials and try again."
+          "Failed to log in. Please check your credentials and try again.",
       );
       console.error(err.response);
     } finally {
@@ -148,10 +153,11 @@ export default function SignIn() {
           </div>
         </div>
         <br />
-        <button 
-         disabled = {isSubmitting}
-         className={`btn text-inverse bg-primary ${isSubmitting ? 'submitting' : ''}  `}  
-         id="submit-btn">
+        <button
+          disabled={isSubmitting}
+          className={`btn text-inverse bg-primary ${isSubmitting ? "submitting" : ""}  `}
+          id="submit-btn"
+        >
           {isSubmitting ? "Logging in..." : "Access Dashboard"}
           <SendHorizontal size={18} />
         </button>
@@ -164,7 +170,7 @@ export default function SignIn() {
         <p className="text-center">
           Forgot password ? &nbsp;
           <Link to="/forgot-password" className="text-primary">
-             forgot password
+            forgot password
           </Link>
         </p>
       </form>
