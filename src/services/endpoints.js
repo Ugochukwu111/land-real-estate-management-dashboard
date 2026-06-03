@@ -1,4 +1,5 @@
 import axios from "axios";
+import api from "./api";
 
 const baseAPI = import.meta.env.VITE_API_ENDPOINT;
 
@@ -52,3 +53,33 @@ export const  resetPassword = async (email, password) => {
     throw error; 
   }
 }
+
+export const checkUserAvailability = async (username) =>{
+  try{
+    const response = await axios.get(`${baseAPI}/api/auth/check-username?username=${username}`);
+    return response?.data?.available;
+  }catch(error){
+  console.error("check user availability error", error.response);
+    return false;
+  }
+}
+
+export const getMe = async () => {
+  try {
+    const response = await api.get("/api/auth/me");
+    return response.data;
+  } catch (error) {
+    console.error("get me error", error.response);
+    throw error;
+  }
+};
+
+export const completeProfile = async (profileData) => {
+  try {
+    const response = await api.post("/api/auth/complete-profile", profileData);
+    return response.data;
+  } catch (error) {
+    console.error("complete profile error", error.response);
+    throw error;
+  }
+};

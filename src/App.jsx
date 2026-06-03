@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import { DashBoardLayout } from "./Components/Admin/DashBoardLayout";
+
+import { getMe } from "./services/endpoints.js";
+import useUserStore from "./store/user.js";
 
 /*
 =================
@@ -38,11 +41,35 @@ ASSOCIATE PAGES
 import AssociateDashBoardPage from "./Pages/Associate/AssociateDashboardPage";
 import AssociateViewListings from "./Pages/Associate/AssociateViewListings";
 import AssociateOpenDeals from "./Pages/Associate/AssociateOpenDeals";
-import CompleteProfile from "./Pages/Associate/CompleteProfile";
+import CompleteProfile from "./Pages/Associate/CompleteProfile/CompleteProfile";
 
 import NotFound from "./Pages/NotFound";
 
 function App() {
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+  const accessToken = useUserStore((state) => state.accessToken);
+
+  const isAdmin = user?.role === "admin";
+  const isAssociate = user?.role === "associate";
+  const isLoggedIn = !!accessToken;
+  const hasCompletedProfile = user?.hasCompletedProfile;
+
+  const handleGetMe = async () => {
+    if (!accessToken) return;
+    try {
+      const response = await getMe();
+      console.log("get me response", response?.user);
+      setUser(response?.user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    handleGetMe();
+  }, [accessToken]);
+
   return (
     <>
       <ToastContainer
@@ -55,6 +82,7 @@ function App() {
         draggable
         theme="light"
       />
+      {isLoggedIn && isAssociate && !hasCompletedProfile && <CompleteProfile  />}
       <Routes>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
@@ -64,7 +92,16 @@ function App() {
         <Route path="/admin/sign-in" element={<AdminSignIn />} />
         <Route path="*" element={<NotFound />} />
 
-        <Route path="/admin" element={<DashBoardLayout isAdmin={true} />}>
+        <Route
+          path="/admin"
+          element={
+            isLoggedIn && isAdmin ? (
+              <DashBoardLayout isAdmin={true} />
+            ) : (
+              <Navigate to="/sign-in" replace />
+            )
+          }
+        >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<AdminDashBoardPage />} />
           <Route path="associate" element={<AdminAssociatePage />} />
@@ -81,9 +118,18 @@ function App() {
 
         {/* associates navigation */}
 
-        <Route path="/associate" element={<DashBoardLayout isAdmin={false} />}>
+        <Route
+          path="/associate"
+          element={
+            isLoggedIn && isAssociate ? (
+              <DashBoardLayout isAdmin={false} />
+            ) : (
+              <Navigate to="/sign-in" replace />
+            )
+          }
+        >
           <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<CompleteProfile />} />
+          <Route path="dashboard" element={<AssociateDashBoardPage />} />
           <Route path="edith" element={<AdminDashBoardPage />} />
           <Route path="associate" element={<AdminAssociatePage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
