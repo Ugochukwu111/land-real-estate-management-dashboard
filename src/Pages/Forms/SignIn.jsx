@@ -92,7 +92,9 @@ export default function SignIn() {
       toast.success(res?.message || "Logged in successfully!");
 
       setTimeout(() => {
-        navigate("/associate");
+        res?.user?.role === "admin"
+          ? navigate("/admin/dashboard")
+          : navigate("/associate/dashboard");
       }, 2000);
     } catch (err) {
       toast.error(
