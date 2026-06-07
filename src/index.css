@@ -261,6 +261,9 @@ COMPONENTS UTILS
   justify-content: center;
   align-items: center;
   z-index: 100;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 1em 0;
 }
 
  .modal {

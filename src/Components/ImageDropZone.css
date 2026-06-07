@@ -1,0 +1,89 @@
+/* Container styling */
+.dropzone-container {
+  border: 2px dashed #cccccc;
+  border-radius: 8px;
+  padding: 0rem;
+  text-align: center;
+  cursor: pointer;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease-in-out;
+  background-color: #fafafa; /* Very light gray background */
+}
+
+/* Hover state */
+.dropzone-container:hover {
+  border-color: #999999;
+  background-color: #f0f0f0;
+}
+
+/* Active state (when a file is actively being dragged over it) */
+.dropzone-container.active {
+  border-color: #007bff; /* Primary brand color */
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Placeholder Text & Icon */
+.dropzone-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #666666;
+}
+
+.upload-icon {
+  color: #999999;
+  margin-bottom: 0.75rem;
+}
+
+.placeholder-text {
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.support-text {
+  font-size: 0.75rem;
+  color: #999999;
+  margin: 0;
+}
+
+/* Image Preview State */
+.preview-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.preview-image {
+  height: 150px;
+  width: 150px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Remove Button overlay */
+.remove-btn {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background-color: var(--color-danger); 
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.remove-btn:hover {
+  background-color: #dc2626;
+  transform: scale(1.05);
+}

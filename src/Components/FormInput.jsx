@@ -10,7 +10,8 @@ export default function FormInput({
   autoComplete,
   onChange,
   onBlur,
-  className
+  className,
+  ...props
 }) {
   return (
     <div className={`flex flex-col input-container ${className}`}>
@@ -32,6 +33,7 @@ export default function FormInput({
         autoComplete={autoComplete}
         onChange={onChange}
         onBlur={onBlur}
+        {...props}
       />
 
       {icon}

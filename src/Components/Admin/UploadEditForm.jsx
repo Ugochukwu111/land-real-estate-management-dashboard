@@ -1,28 +1,24 @@
 import { useState } from "react";
-import { X, FolderPen, MessageSquareMore } from "lucide-react";
+import { X, FolderPen, MessageSquareMore, SendHorizontal } from "lucide-react";
 import DropDown from "../DropDown";
 import ListingDocuments from "../ListingDocuments";
+import ImageDropZone from "../ImageDropZone";
+import FormInput from "../FormInput.jsx";
+import { uploadListing } from "../../services/listing/endpoints.js";
 
 import "./UploadEditForm.css";
 
-/*
-------------------------------------------------------------
-UploadEditForm Component
-------------------------------------------------------------
-
-This component is a reusable form used for BOTH:
-- Uploading a new listing
-- Editing an existing listing
-
-It receives:
-- formValues → the current form state (controlled by parent)
-- setFormValues → function to update parent state
-- isUpload → determines if form is in "create" or "edit" mode
-
-All inputs (text fields + dropdowns) are controlled via formValues,
-making this a single source of truth for the entire form.
-------------------------------------------------------------
-*/
+/**
+ * UploadEditForm
+ * * A reusable modal form component handling both the creation of new
+ * listings and the editing of existing ones.
+ * * Architecture:
+ * - Operates as a fully controlled component.
+ * - Relies entirely on the parent's `formValues` state as its single source of truth.
+ * - Manages its own localized state for validation errors and submission status.
+ * - Packs text inputs and binary files (images/documents) into a FormData
+ * payload for backend submission.
+ */
 
 export default function UploadEditForm({
   isUpload = true,
@@ -43,16 +39,28 @@ export default function UploadEditForm({
     }));
   };
 
-   /*
+  /*
   Handles text/number input changes
   Updates formValues in parent state
   */
-  const handleChange = (e) => {
+ const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    // ALWAYS use 'prev' when dealing with complex shared state
+    setFormValues((prev) => ({ 
+      ...prev, 
+      [name]: value 
+    }));
   };
 
-    /*
+
+  const handleImageChange = (newFile) => {
+    setFormValues((prev) => ({
+      ...prev,
+      image: newFile,
+    }));
+  };
+
+  /*
   Runs validation when user leaves an input field (onBlur)
   */
   const handleBlur = (e) => {
@@ -65,7 +73,6 @@ export default function UploadEditForm({
     }));
   };
 
-
   /*
   Validates entire form before submission
   */
@@ -73,29 +80,32 @@ export default function UploadEditForm({
     let errors = {};
     errors.name = validateInput(formValues.name);
     errors.description = validateInput(formValues.description);
+    errors.price = validateInput(formValues.price);
+    errors.commissionPrice = validateInput(formValues.commissionPrice);
 
     return errors;
   };
 
-
-    /*
+  /*
   Field-specific validation router
   */
   const validateField = (name, value) => {
     if (name === "name") return validateInput(value);
     if (name === "description") return validateInput(value);
+    if (name === "price") return validateInput(value);
+    if (name === "commissionPrice") return validateInput(value);
     return "";
   };
 
   /** used to validate listing name input and description**/
   const validateInput = (value) => {
-    if (value === "") {
-      return "field can not be empty";
+    if (!value || String(value).trim() === "") {
+      return "Field cannot be empty";
     }
     return "";
   };
 
-    /*
+  /*
   Handles form submission:
   - validates form
   - blocks submit if errors exist
@@ -112,9 +122,29 @@ export default function UploadEditForm({
 
     try {
       setSubmitting(true);
-      // const res = await  axios.post(`api`)
+
+      const formData = new FormData();
+
+      formData.append("name", formValues.name);
+      formData.append("description", formValues.description);
+      formData.append("price", formValues.price);
+      formData.append("commissionPrice", formValues.commissionPrice);
+      formData.append("location", formValues.location);
+
+      if (formValues.image) {
+        formData.append("image", formValues.image);
+      }
+
+      if (formValues.documents && formValues.documents.length > 0) {
+        formValues.documents.forEach((doc) => {
+          formData.append("documents", doc);
+        });
+      }
+
+      const res = await uploadListing(formData);
+      console.log(res)
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     } finally {
       setSubmitting(false);
     }
@@ -137,88 +167,79 @@ export default function UploadEditForm({
       </button>
       <br />
       <figure>
-        <img src="" alt="" />
+        <ImageDropZone
+          selectedImage={formValues.image}
+          onImageSelect={handleImageChange}
+        />
       </figure>
 
       <div className="input-wrapper">
-        {/* name form input */}
-        <div className="flex flex-col input-container">
-          <div className="flex justify-between items-center">
-            <label htmlFor="name">Name</label>
-            <span className="errorMsg text-fail">{errorMgs.name}</span>
-          </div>
-          <input
-            type="text"
-            placeholder=" eg: 100 by 100 , ugbowo "
-            name="name"
-            id="name"
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <FolderPen size={16} />
-        </div>
-        {/* description form input*/}
-        <div className="flex flex-col input-container">
-          <div className="flex justify-between items-center">
-            <label htmlFor="description">Description</label>
-            <span className="errorMsg text-fail">{errorMgs.description}</span>
-          </div>
-          <input
-            type="text"
-            placeholder=" eg: 100 by 100 , along ugbowo road"
-            name="description"
-            id="description"
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          <MessageSquareMore size={16} />
-        </div>
+        <FormInput
+          label="Name"
+          name="name"
+          id="name"
+          placeholder="eg: 100 by 100, ugbowo"
+          value={formValues.name || ""}
+          error={errorMgs.name}
+          icon={<FolderPen size={16} />}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <FormInput
+          label="Description"
+          name="description"
+          id="description"
+          placeholder="eg: 100 by 100, along ugbowo road"
+          value={formValues.description || ""}
+          error={errorMgs.description}
+          icon={<MessageSquareMore size={16} />}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
         <div className=" flex gap-1 justify-between items-center price-location-container">
-          <div className="flex flex-col input-container flex-1">
-            <div className="flex justify-between items-end">
-              <span className="errorMsg text-fail">{errorMgs.description}</span>
-            </div>
-            <input
-              type="number"
-              step={1}
-              placeholder="Enter Price"
-              name="price"
-              id="price"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </div>
+          <FormInput
+            label="Price"
+            type="number"
+            step={1} 
+            name="price"
+            id="price"
+            placeholder="Enter Price"
+            value={formValues.price || ""}
+            error={errorMgs.price}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="flex-1" 
+          />
 
-         <div className="flex flex-col input-container flex-1">
-            <div className="flex justify-between items-end">
-              <span className="errorMsg text-fail">{errorMgs.description}</span>
-            </div>
-            <input
-              type="number"
-              step={1}
-              placeholder="Enter Commission Price "
-              name="commission-price"
-              id="commission-price"
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </div>
-
-          
+          <FormInput
+            label="Commission"
+            type="number"
+            step={1}
+            name="commissionPrice"
+            id="commissionPrice"
+            placeholder="Enter Commission"
+            value={formValues.commissionPrice || ""}
+            error={errorMgs.commissionPrice}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            className="flex-1"
+          />
         </div>
+
         <br />
+
         <div className="flex-1">
-            <DropDown
-              selected={formValues.location || "select location"}
-              setSelected={(val) =>
-                setFormValues((prev) => ({
-                  ...prev,
-                  location: val,
-                }))
-              }
-              list={locationList}
-            />
-          </div>
+          <DropDown
+            selected={formValues.location || "select location"}
+            setSelected={(val) =>
+              setFormValues((prev) => ({
+                ...prev,
+                location: val,
+              }))
+            }
+            list={locationList}
+          />
+        </div>
         <div>
           <p className="text-muted">selected Documents:</p>
           <div>
@@ -230,18 +251,22 @@ export default function UploadEditForm({
             />
           </div>
 
-          {Array.isArray(formValues.documents) && formValues.documents.length > 0 && (
-            <div className="selected-documents-preview">
-              <ListingDocuments documents={formValues.documents} />
-            </div>
-          )}
+          {Array.isArray(formValues.documents) &&
+            formValues.documents.length > 0 && (
+              <div className="selected-documents-preview">
+                <ListingDocuments documents={formValues.documents} />
+              </div>
+            )}
         </div>
-        <button
-          className="btn text-inverse bg-primary w-full"
-          disabled={submitting}
-        >
-          Confirm {isUpload ? "Upload" : "Edit"}
-        </button>
+        <div className="confirm-btn-container">
+          <button
+            className={`btn text-inverse bg-primary w-full ${submitting ? "submitting" : ""}`}
+            disabled={submitting}
+          >
+            {isUpload ? "Confirm Upload" : "Confirm Edit"}
+            <SendHorizontal size={20} />
+          </button>
+        </div>
       </div>
     </form>
   );
