@@ -7,6 +7,7 @@ import FormInput from "../FormInput.jsx";
 import { uploadListing } from "../../services/listing/endpoints.js";
 
 import "./UploadEditForm.css";
+import { toast } from "react-toastify";
 
 /**
  * UploadEditForm
@@ -143,8 +144,10 @@ export default function UploadEditForm({
 
       const res = await uploadListing(formData);
       console.log(res)
+      toast.success(res?.data?.message || 'success')
     } catch (err) {
-      console.log(err.response);
+      toast.error(err?.response?.data?.message || 'upload failed')
+      console.error(err.response);
     } finally {
       setSubmitting(false);
     }
