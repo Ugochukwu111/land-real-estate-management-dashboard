@@ -5,7 +5,7 @@ const baseAPI = import.meta.env.VITE_API_ENDPOINT;
 
 export const uploadListing = async (formData) => {
   try {
-    const response = await api.post("/api/upload-listing", formData, {
+    const response = await api.post("/api/listing/upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
