@@ -9,6 +9,7 @@ import redLogo from "../../assets/logo.png";
 import { confirmOTP, resendOTP } from "../../services/endpoints.js";
 
 import { toast } from "react-toastify";
+import useUserStore from "../../store/user.js";
 
 import "./Forms.css";
 
@@ -20,7 +21,7 @@ export default function ConfirmOtp() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResendingOtp, setIsResendingOtp] = useState(false);
   const [isOtpComplete, setIsOtpComplete] = useState(true);
-
+  const setAccessToken = useUserStore((state) => state.setAccessToken);
   const [otp, setOtp] = useState("");
 
   const navigate = useNavigate();
@@ -33,14 +34,19 @@ export default function ConfirmOtp() {
     setIsSubmitting(true);
     try {
       const res = await confirmOTP(otp, email);
+      setAccessToken(res.accesstoken)
       toast.success(res?.message || "OTP confirmed successfully!");
+
       setTimeout(() => {
         if (purpose === "forgot-password") {
           navigate(`/reset-password?email=${email}`);
         } else {
-          navigate("/associate");
+                  res?.user?.role === "admin"
+          ? navigate("/admin/dashboard")
+          : navigate("/associate/dashboard");
         }
       }, 2000);
+
     } catch (error) {
       toast.error(
         error.response?.error ||
