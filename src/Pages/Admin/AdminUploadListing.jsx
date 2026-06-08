@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Modal from "react-modal";
 import { ArrowUpFromLine, Upload } from "lucide-react";
-
 import ListingCard from "../../Components/ListingCard";
 import UploadEditForm from "../../Components/Admin/UploadEditForm";
 
@@ -39,6 +38,7 @@ export default function AdminUploadListing() {
   - Ensures consistent data handling across the app
   */
   const [formValues, setFormValues] = useState({
+    image: '',
     name: "",
     description: "",
     price: 5000,
