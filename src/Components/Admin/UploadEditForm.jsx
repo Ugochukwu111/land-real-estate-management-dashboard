@@ -5,6 +5,7 @@ import ListingDocuments from "../ListingDocuments";
 import ImageDropZone from "../ImageDropZone";
 import FormInput from "../FormInput.jsx";
 import { uploadListing } from "../../services/listing/endpoints.js";
+import  useListingStore from '../../store/listing.js'
 
 import "./UploadEditForm.css";
 import { toast } from "react-toastify";
@@ -32,6 +33,8 @@ export default function UploadEditForm({
 
   const locationList = ["benin | ugbowo", "benin | uselu", "lagos | lekki"];
   const documentList = ["C of O", "surveyed", "deed"];
+
+  const addListing =  useListingStore((state) => state.addListing)
 
   const handleDocumentChange = (documents) => {
     setFormValues((prev) => ({
@@ -119,7 +122,6 @@ export default function UploadEditForm({
 
     const hasErrors = Object.values(errors).some((msg) => msg !== "");
     if (hasErrors) return;
-    console.log(formValues);
 
     try {
       setSubmitting(true);
@@ -131,20 +133,32 @@ export default function UploadEditForm({
       formData.append("price", formValues.price);
       formData.append("commissionPrice", formValues.commissionPrice);
       formData.append("location", formValues.location);
+      formData.append("documents", formValues.documents)
 
       if (formValues.image) {
         formData.append("image", formValues.image);
       }
 
-      if (formValues.documents && formValues.documents.length > 0) {
-        formValues.documents.forEach((doc) => {
-          formData.append("documents", doc);
-        });
-      }
 
       const res = await uploadListing(formData);
-      console.log(res)
+      addListing(res?.listing);
       toast.success(res?.data?.message || 'success')
+
+      setFormValues({
+        name: "",
+        description: "",
+        price: "",
+        commissionPrice: "",
+        location: "",
+        image: null,
+        documents: []
+      });
+
+      if (onClose) {
+        onClose();
+      }
+
+
     } catch (err) {
       toast.error(err?.response?.data?.message || 'upload failed')
       console.error(err.response);
@@ -263,6 +277,7 @@ export default function UploadEditForm({
         </div>
         <div className="confirm-btn-container">
           <button
+           id="submit-btn"
             className={`btn text-inverse bg-primary w-full ${submitting ? "submitting" : ""}`}
             disabled={submitting}
           >

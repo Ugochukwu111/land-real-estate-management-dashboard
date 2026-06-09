@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 import { DashBoardLayout } from "./Components/Admin/DashBoardLayout";
 
 import { getMe } from "./services/endpoints.js";
+import { getListings } from "./services/listing/endpoints.js";
+
 import useUserStore from "./store/user.js";
+import useListingStore from "./store/listing.js";
 
 /*
 =================
@@ -50,6 +53,8 @@ function App() {
   const setUser = useUserStore((state) => state.setUser);
   const accessToken = useUserStore((state) => state.accessToken);
 
+  const setListing = useListingStore((state) => state.setListing); 
+
   const isAdmin = user?.role === "admin";
   const isAssociate = user?.role === "associate";
   const isLoggedIn = !!accessToken;
@@ -62,13 +67,27 @@ function App() {
       console.log("get me response", response?.user);
       setUser(response?.user);
     } catch (err) {
-      console.log(err);
+      console.log("error getting me: ", err);
     }
   };
 
   useEffect(() => {
     handleGetMe();
   }, [accessToken]);
+
+  const handleGetListings = async () => {
+    try {
+      const res = await getListings();
+      setListing(res?.data);
+    } catch (err) {
+      toast.error('Error loading listings')
+      console.log(`Error loading listing : ${err?.response}`)
+    }
+  };
+
+  useEffect(()=>{
+    handleGetListings();
+  },[])
 
   return (
     <>
@@ -82,7 +101,7 @@ function App() {
         draggable
         theme="light"
       />
-      {isLoggedIn && isAssociate && !hasCompletedProfile && <CompleteProfile  />}
+      {isLoggedIn && isAssociate && !hasCompletedProfile && <CompleteProfile />}
       <Routes>
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />

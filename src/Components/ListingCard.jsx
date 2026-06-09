@@ -11,8 +11,14 @@ import {
   Copy,
 } from "lucide-react";
 import ListingDocuments from "./ListingDocuments";
+import { formatNaira } from "../utils/formatMoney";
+import { toast } from "react-toastify";
+import {  deleteListings } from '../services/listing/endpoints.js'
+import useListingStore from "../store/listing.js";
+
 
 import "./ListingCard.css";
+import { useState } from "react";
 
 /**
  * Reusable listing card component used across
@@ -48,19 +54,40 @@ import "./ListingCard.css";
  *   without duplicating component logic
  */
 
-export default function ListingCard({ 
-  isOpenDeal = false, 
-  isAdmin = false ,
-  openModal 
+export default function ListingCard({
+  isOpenDeal = false,
+  isAdmin = false,
+  openModal,
+  listing,
 }) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const removeListing = useListingStore((state) => state.removeListing);
+
+    const handleDeleteListing = async  (id) =>{
+       setIsDeleting(true);
+      try{
+        const res =  await deleteListings(id);
+        removeListing(id);
+        toast.success(res?.message || 'success')
+      }catch(err){
+        toast.error('Error Deleting listing')
+        console.log(`error deleting listing: ${err.response}`)
+      }finally{
+        setIsDeleting(false);
+      }
+    }
+  
+
+
   return (
     <div className=" flex gap-1 listing-card box">
       <figure className="listing-image skeleton">
-        <img src="" alt="" />
+        <img src={listing?.image} alt={listing?.name} />
         {!isAdmin && (
           <div className=" flex flex-col gap-2 btn-container">
             <button
-              aria-label={`download listing picture `}
+              aria-label={`download listing  ${listing?.name} picture`}
               className=" text-inverse "
             >
               <Download size={22} />
@@ -71,14 +98,10 @@ export default function ListingCard({
           </div>
         )}
       </figure>
-      <div className="listing-details-container  flex  flex-col justify-between gap-2">
+      <div className="listing-details-container  flex  flex-1  flex-col justify-between gap-2">
         <div>
-          <p className=" fw700 text-red listing-name">100 by 100 Leki Estate</p>
-          <p className="listing-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur
-            cumque voluptate hic eveniet quidem quibusdam, dolorem quod, eaque
-            non ad nesciunt!
-          </p>
+          <p className=" fw700 text-red listing-name">{listing?.name}</p>
+          <p className="listing-description">{listing?.description}</p>
 
           {isOpenDeal && (
             <p className="flex items-center gap-1 fw700 text-muted">
@@ -87,21 +110,31 @@ export default function ListingCard({
           )}
 
           <div className="flex items-center justify-between">
-            <p className="text-secondary fw700">$20,000</p>
+            <p className="text-secondary flex flex-col fw700">
+              <span>Price: {formatNaira(listing?.price)}</span>
+              <span className="text-success">Commission: &nbsp;{formatNaira(listing?.commissionPrice)} + </span>
+            </p>
             <p className="text-muted fs-small text-end">
-              <MapPin size={12} /> Benin City | Ugbowo
+              <MapPin size={12} /> {listing?.location}
             </p>
           </div>
         </div>
-        <ListingDocuments documents={["C of O", "surveyed"]} />
+        <ListingDocuments documents={listing?.documents} />
         <div className=" flex gap-1 btn-container">
           {!isOpenDeal && isAdmin && (
             <>
-              <button className="btn flex-1 bg-success-light text-success">
+              <button
+                onClick={ isAdmin ? () => handleDeleteListing(listing._id) : undefined }
+                className="btn flex-1 bg-success-light text-success"
+              >
                 edit <Pencil size={15} />
               </button>
-              <button className="btn flex-1 bg-danger text-inverse">
-                Delete <Trash2 size={15} />
+              <button
+                disabled={isDeleting}
+                onClick={ isAdmin ? () => handleDeleteListing(listing._id) : undefined }
+                className="btn flex-1 bg-danger text-inverse"
+              >
+                {isDeleting? 'Deleting...' : <>Delete <Trash2 size={15} /></>} 
               </button>
             </>
           )}
@@ -117,12 +150,14 @@ export default function ListingCard({
             </>
           )}
 
-          {
-            !isAdmin && !isOpenDeal &&
-            <button onClick={() => openModal(true)} className="btn flex-1 bg-secondary text-inverse">
+          {!isAdmin && !isOpenDeal && (
+            <button
+              onClick={() => openModal(true)}
+              className="btn flex-1 bg-secondary text-inverse"
+            >
               Open Deal
             </button>
-          }
+          )}
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import { ArrowUpFromLine, Upload } from "lucide-react";
 import ListingCard from "../../Components/ListingCard";
 import UploadEditForm from "../../Components/Admin/UploadEditForm";
+import useListingStore from "../../store/listing";
 
 
 /*
@@ -46,7 +47,10 @@ export default function AdminUploadListing() {
     location: '',
     documents: [],
   });
-  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const listings = useListingStore((state) => (state.listing));
+
+
 
   return (
     <>
@@ -75,9 +79,15 @@ export default function AdminUploadListing() {
         </div>
         <br />
         <div className="card-container bg-muted ">
-          <ListingCard  isAdmin = {true}/>
-          <ListingCard isAdmin = {true}/>
-          <ListingCard isAdmin = {true} />
+          {
+            listings?.map((listing) => (
+               <ListingCard 
+                 key={listing?._id} 
+                 listing = {listing}  
+                 isAdmin = {true}
+                 />
+            ))
+          }
         </div>
       </div>
     </>
