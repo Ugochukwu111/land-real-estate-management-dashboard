@@ -7,10 +7,10 @@
 }
 
 .listing-card .listing-image{
-  min-width: 250px;
+  width: 250px;
   border: 2px solid var(--text-muted);
   border-radius: inherit;
-  min-height: 250px;
+  height: 250px;
   position: relative;
 }
 
@@ -46,4 +46,9 @@
   .listing-card{
     flex-direction: column;
   }
+
+  .listing-card .listing-image{
+  width: 100%;
+
+}
 }
