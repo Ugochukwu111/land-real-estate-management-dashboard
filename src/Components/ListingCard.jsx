@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 import ListingDocuments from "./ListingDocuments";
 import { formatNaira } from "../utils/formatMoney";
-import { toast } from "react-toastify";
-import {  deleteListings } from '../services/listing/endpoints.js'
 import useListingStore from "../store/listing.js";
+import Modal from "react-modal";
+
 
 
 import "./ListingCard.css";
@@ -59,31 +59,18 @@ export default function ListingCard({
   isAdmin = false,
   openModal,
   listing,
+  setIsDeleteModal ,
+  setActiveListing,
 }) {
-  const [isDeleting, setIsDeleting] = useState(false);
 
-  const removeListing = useListingStore((state) => state.removeListing);
 
-    const handleDeleteListing = async  (id) =>{
-       setIsDeleting(true);
-      try{
-        const res =  await deleteListings(id);
-        removeListing(id);
-        toast.success(res?.message || 'success')
-      }catch(err){
-        toast.error('Error Deleting listing')
-        console.log(`error deleting listing: ${err.response}`)
-      }finally{
-        setIsDeleting(false);
-      }
-    }
   
 
 
   return (
     <div className=" flex gap-1 listing-card box">
       <figure className="listing-image skeleton">
-        <img src={listing?.image} alt={listing?.name} />
+        <img loading="lazy" src={listing?.image} alt={listing?.name} />
         {!isAdmin && (
           <div className=" flex flex-col gap-2 btn-container">
             <button
@@ -124,17 +111,16 @@ export default function ListingCard({
           {!isOpenDeal && isAdmin && (
             <>
               <button
-                onClick={ isAdmin ? () => handleDeleteListing(listing._id) : undefined }
+                onClick={ isAdmin ? () => setIsDeleteModal(true) : undefined }
                 className="btn flex-1 bg-success-light text-success"
               >
                 edit <Pencil size={15} />
               </button>
               <button
-                disabled={isDeleting}
-                onClick={ isAdmin ? () => handleDeleteListing(listing._id) : undefined }
+                onClick={ isAdmin ? () => { setActiveListing(listing); setIsDeleteModal(true)} : undefined }
                 className="btn flex-1 bg-danger text-inverse"
               >
-                {isDeleting? 'Deleting...' : <>Delete <Trash2 size={15} /></>} 
+              Delete <Trash2 size={15} />
               </button>
             </>
           )}

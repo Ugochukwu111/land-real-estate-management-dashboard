@@ -1,0 +1,50 @@
+
+.delete-container figure{
+  width: 100px;
+  animation: hover 3s linear infinite;
+}
+
+@keyframes identifier {
+  0%{
+    transform: translateY();
+  }
+}
+
+.delete-container .details{
+  padding: 1em .4em;
+  border-radius: .5rem;
+  background-color: rgba(255, 145, 145, 0.231);
+  position: relative;
+}
+
+.delete-container .details:after{
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 5px;
+  border-radius: 2rem;
+  background-color: var(--color-danger);
+  left: 0;
+  bottom: -.5em;
+/* 
+  transform: translateX(50%); */
+
+}
+.delete-container .details:before{
+  content: '';
+  position: absolute;
+  width: 30%;
+  height: 5px;
+  border-radius: 2rem;
+  background-color: var(--color-danger);
+  right: 0;
+  top: -.5em;
+/* 
+  transform: translateX(50%); */
+
+}
+
+.delete-container .cancel-btn{
+  border: 2px solid var(--color-danger);
+  background-color: transparent;
+}

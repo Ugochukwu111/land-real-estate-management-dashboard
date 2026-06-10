@@ -5,3 +5,11 @@
   flex: 1;
 }
 
+.delete-modal{
+  border-radius: .5rem;
+  width: 100%;
+  max-width:  600px;
+  margin: .5em;
+  min-height: fit-content;
+}
+
