@@ -37,3 +37,13 @@ export const deleteListings = async (id) => {
   }
 };
 
+export const editListings = async (id, formValues) => {
+  try {
+    const response = await api.put(`/api/listing/update/${id}`, formValues);
+    return response;
+  } catch (error) {
+    console.error("Edit Listing error", error.response);
+    throw error;
+  }
+};
+

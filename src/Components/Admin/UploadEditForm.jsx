@@ -5,10 +5,12 @@ import ListingDocuments from "../ListingDocuments";
 import ImageDropZone from "../ImageDropZone";
 import FormInput from "../FormInput.jsx";
 import { uploadListing } from "../../services/listing/endpoints.js";
-import  useListingStore from '../../store/listing.js'
+import useListingStore from "../../store/listing.js";
 
 import "./UploadEditForm.css";
 import { toast } from "react-toastify";
+
+import { editListings } from "../../services/listing/endpoints.js";
 
 /**
  * UploadEditForm
@@ -23,18 +25,20 @@ import { toast } from "react-toastify";
  */
 
 export default function UploadEditForm({
-  isUpload = true,
+  isUpload = false,
   setFormValues,
   formValues,
   onClose,
+  activeListingId = '',
 }) {
+
   const [errorMgs, setErrorMgs] = useState({}); // stores validation errors per field
   const [submitting, setSubmitting] = useState(false); // prevents double submit
 
   const locationList = ["benin | ugbowo", "benin | uselu", "lagos | lekki"];
   const documentList = ["C of O", "surveyed", "deed"];
 
-  const addListing =  useListingStore((state) => state.addListing)
+  const addListing = useListingStore((state) => state.addListing);
 
   const handleDocumentChange = (documents) => {
     setFormValues((prev) => ({
@@ -47,15 +51,14 @@ export default function UploadEditForm({
   Handles text/number input changes
   Updates formValues in parent state
   */
- const handleChange = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     // ALWAYS use 'prev' when dealing with complex shared state
-    setFormValues((prev) => ({ 
-      ...prev, 
-      [name]: value 
+    setFormValues((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
-
 
   const handleImageChange = (newFile) => {
     setFormValues((prev) => ({
@@ -133,16 +136,15 @@ export default function UploadEditForm({
       formData.append("price", formValues.price);
       formData.append("commissionPrice", formValues.commissionPrice);
       formData.append("location", formValues.location);
-      formData.append("documents", formValues.documents)
+      formData.append("documents", formValues.documents);
 
       if (formValues.image) {
         formData.append("image", formValues.image);
       }
 
-
       const res = await uploadListing(formData);
       addListing(res?.listing);
-      toast.success(res?.data?.message || 'success')
+      toast.success(res?.data?.message || "success");
 
       setFormValues({
         name: "",
@@ -151,24 +153,36 @@ export default function UploadEditForm({
         commissionPrice: "",
         location: "",
         image: null,
-        documents: []
+        documents: [],
       });
 
       if (onClose) {
         onClose();
       }
-
-
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'upload failed')
+      toast.error(err?.response?.data?.message || "upload failed");
       console.error(err.response);
     } finally {
       setSubmitting(false);
     }
   };
 
+  const handleEdit = async (e) =>{
+    e.preventDefault();
+    setSubmitting(true)//reuse submitting state in this type of given context  , because its the same btn calling upload and edit
+     try{
+       const res = await editListings(activeListingId,  formValues);
+       toast.success(res?.message || 'edit listing Success');
+     }catch(err){
+      toast.error('Edit listing error try again later');
+      console.error('Edit listing error :', err);
+     }finally{
+      setSubmitting(false);
+     }
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="p-relative upload-edit-form">
+    <form onSubmit={isUpload ?handleSubmit: handleEdit} className="p-relative upload-edit-form">
       <h3 className="text-center">{isUpload ? "Upload" : "Edit"} listing</h3>
       <p className="text-muted text-center">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati
@@ -183,12 +197,14 @@ export default function UploadEditForm({
         <X size={16} />
       </button>
       <br />
-      <figure>
-        <ImageDropZone
-          selectedImage={formValues.image}
-          onImageSelect={handleImageChange}
-        />
-      </figure>
+      {isUpload && (
+        <figure>
+          <ImageDropZone
+            selectedImage={formValues.image}
+            onImageSelect={handleImageChange}
+          />
+        </figure>
+      )}
 
       <div className="input-wrapper">
         <FormInput
@@ -196,7 +212,7 @@ export default function UploadEditForm({
           name="name"
           id="name"
           placeholder="eg: 100 by 100, ugbowo"
-          value={formValues.name || ""}
+          value={formValues.name}
           error={errorMgs.name}
           icon={<FolderPen size={16} />}
           onChange={handleChange}
@@ -207,7 +223,7 @@ export default function UploadEditForm({
           name="description"
           id="description"
           placeholder="eg: 100 by 100, along ugbowo road"
-          value={formValues.description || ""}
+          value={formValues.description || ''}
           error={errorMgs.description}
           icon={<MessageSquareMore size={16} />}
           onChange={handleChange}
@@ -217,15 +233,15 @@ export default function UploadEditForm({
           <FormInput
             label="Price"
             type="number"
-            step={1} 
+            step={1}
             name="price"
             id="price"
             placeholder="Enter Price"
-            value={formValues.price || ""}
+            value={formValues.price || ''}
             error={errorMgs.price}
             onChange={handleChange}
             onBlur={handleBlur}
-            className="flex-1" 
+            className="flex-1"
           />
 
           <FormInput
@@ -235,7 +251,7 @@ export default function UploadEditForm({
             name="commissionPrice"
             id="commissionPrice"
             placeholder="Enter Commission"
-            value={formValues.commissionPrice || ""}
+            value={formValues.commissionPrice || ''}
             error={errorMgs.commissionPrice}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -247,7 +263,7 @@ export default function UploadEditForm({
 
         <div className="flex-1">
           <DropDown
-            selected={formValues.location || "select location"}
+            selected={formValues.location || ''}
             setSelected={(val) =>
               setFormValues((prev) => ({
                 ...prev,
@@ -262,7 +278,7 @@ export default function UploadEditForm({
           <div>
             <DropDown
               multiple
-              selected={formValues.documents || []}
+              selected={formValues.documents || ''}
               setSelected={handleDocumentChange}
               list={documentList}
             />
@@ -277,7 +293,7 @@ export default function UploadEditForm({
         </div>
         <div className="confirm-btn-container">
           <button
-           id="submit-btn"
+            id="submit-btn"
             className={`btn text-inverse bg-primary w-full ${submitting ? "submitting" : ""}`}
             disabled={submitting}
           >

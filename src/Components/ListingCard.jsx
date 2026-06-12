@@ -61,6 +61,8 @@ export default function ListingCard({
   listing,
   setIsDeleteModal ,
   setActiveListing,
+  setIsFormOpen,
+  handleEditClick,
 }) {
 
 
@@ -111,7 +113,7 @@ export default function ListingCard({
           {!isOpenDeal && isAdmin && (
             <>
               <button
-                onClick={ isAdmin ? () => setIsDeleteModal(true) : undefined }
+                onClick={isAdmin ? () =>{ handleEditClick(listing)}: undefined}
                 className="btn flex-1 bg-success-light text-success"
               >
                 edit <Pencil size={15} />

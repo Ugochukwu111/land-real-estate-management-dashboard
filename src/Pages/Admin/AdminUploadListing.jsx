@@ -48,13 +48,20 @@ export default function AdminUploadListing() {
     location: "",
     documents: [],
   });
+  const [editFormValues, setEditFormValues] = useState({});
+
+  // modal states
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteModal, setIsDeleteModal] = useState(false);
-  const listings = useListingStore((state) => state.listing);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
 
-  const [isDeleting, setIsDeleting] = useState(false);
+  // zustand states
+  const listings = useListingStore((state) => state.listing);
   const removeListing = useListingStore((state) => state.removeListing);
 
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+ 
   const [activeListing, setActiveListing] = useState({});
 
   const handleCloseForm = () => {
@@ -85,6 +92,26 @@ export default function AdminUploadListing() {
     }
   };
 
+
+const handleEditClick = (listing) => {
+  setEditFormValues({
+    name: listing.name,
+    description: listing.description,
+    price: listing.price,
+    commissionPrice: listing.commissionPrice,
+    location: listing.location,
+    documents: listing.documents || [],
+  });
+
+  setActiveListing(listing);
+
+  setIsEditFormOpen(true);
+};
+
+
+
+
+
   return (
     <>
       <Modal
@@ -95,9 +122,26 @@ export default function AdminUploadListing() {
         overlayClassName="overlay"
       >
         <UploadEditForm
+           isUpload = {true}
           formValues={formValues}
           setFormValues={setFormValues}
           onClose={handleCloseForm}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isEditFormOpen}
+        onRequestClose={()=> setIsEditFormOpen(false)}
+        contentLabel="edit listing form"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <UploadEditForm
+          formValues={editFormValues}
+          setFormValues={setEditFormValues}
+          onClose={()=> setIsEditFormOpen(false)}
+          isUpload = {false}
+          activeListingId={activeListing?._id}
         />
       </Modal>
 
@@ -130,6 +174,8 @@ export default function AdminUploadListing() {
         <div className="card-container bg-muted ">
           {listings?.map((listing) => (
             <ListingCard
+              handleEditClick = {handleEditClick}
+              setIsFormOpen={setIsFormOpen}
               key={listing?._id}
               listing={listing}
               isAdmin={true}
